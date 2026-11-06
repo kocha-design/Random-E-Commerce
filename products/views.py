@@ -161,9 +161,23 @@ def seller_pending(request):
 # ==================== CART ====================
 
 @require_POST
+@require_POST
 def cart_add(request, product_id):
-    cart = Cart(request)
+    # 1. Kagua kama ni Seller
+    if request.user.is_authenticated and request.user.is_seller:
+        messages.error(request, "Sellers cannot buy products. Please log out to shop as a customer.")
+        return redirect('product_detail', pk=product_id)
+
+    # 2. Kagua kama ni bidhaa yake mwenyewe (hii ni kwa ajili ya guest ambaye ni mmiliki? Haiwezekani kwa guest, lakini ni usalama wa ziada)
     product = get_object_or_404(Product, id=product_id)
+    
+    # Kama ni seller (ingawa tumezuia juu), hii ni double check
+    if request.user.is_authenticated and getattr(request.user, 'seller_profile', None) == product.seller:
+        messages.error(request, "You cannot buy your own products.")
+        return redirect('product_detail', pk=product_id)
+
+    # 3. Endelea na cart
+    cart = Cart(request)
     quantity = int(request.POST.get('quantity', 1))
     override = request.POST.get('override') == 'True'
     cart.add(product=product, quantity=quantity, override_quantity=override)
@@ -180,6 +194,11 @@ def cart_remove(request, product_id):
 
 
 def cart_detail(request):
+    # Zuia seller kufikia cart
+    if request.user.is_authenticated and request.user.is_seller:
+        messages.warning(request, "Sellers cannot use the shopping cart. Please log out to shop as a customer.")
+        return redirect('seller_dashboard')
+
     cart = Cart(request)
     
     # Tengeneza ujumbe wa WhatsApp

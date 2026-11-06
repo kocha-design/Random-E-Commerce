@@ -36,7 +36,9 @@
 
             <!-- Right nav -->
             <nav class="header-nav">
-                <!-- Cart link — INAONEKANA KWA WOTE (guest, customer, seller) -->
+                
+                <!-- Cart link — INAONEKANA KWA WATEJA NA ADMIN TU (Haionekani kwa Seller) -->
+                {% if not user.is_authenticated or not user.is_seller %}
                 <a href="{% url 'cart_detail' %}" class="nav-link">
                     <span class="nav-icon">🛒</span>
                     <span class="nav-text">
@@ -44,6 +46,7 @@
                         <strong>{{ cart|length }} items</strong>
                     </span>
                 </a>
+                {% endif %}
 
                 {% if user.is_authenticated %}
                     {% if user.is_seller %}
@@ -160,7 +163,7 @@
                 </li>
                 <li>
                     <span class="contact-icon">🌐</span>
-                    <a href="https://random-technology-solutions.lovable.app" target="_blank" rel="noopener">randomtech.co.tz</a>
+                    <a href="https://random-technology-solutions.lovable.app" target="_blank" rel="noopener">Random Technology Solutions</a>
                 </li>
                 <li>
                     <span class="contact-icon">📞</span>
