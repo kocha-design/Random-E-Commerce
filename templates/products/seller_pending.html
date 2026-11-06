@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Account Pending Approval — {{ user.seller_profile.shop_name }}{% endblock %}
+
+{% block content %}
+<div class="pending-card">
+    <div class="pending-icon">⏳</div>
+    <h1>Your Account is Pending Approval</h1>
+    <p class="muted">
+        Shop: <strong>{{ user.seller_profile.shop_name }}</strong> ·
+        Registered: {{ user.date_joined|date:"d M Y" }}
+    </p>
+
+    <div class="steps">
+        <h3>Next Steps</h3>
+        <ol>
+            <li>
+                <strong>Pay the subscription fee</strong> via M-Pesa:
+                <div class="mpesa-box">
+                    <p>Number: <strong>+255 XXX XXX XXX</strong> (Admin name)</p>
+                    <p>Amount: <strong>TSh 10,000</strong> per month</p>
+                </div>
+            </li>
+            <li>
+                <strong>Send proof of payment</strong> via WhatsApp
+                (<a href="https://wa.me/255XXXXXXXXX" target="_blank">+255 XXX XXX XXX</a>)
+                with a screenshot.
+            </li>
+            <li>
+                <strong>Admin will confirm</strong> your payment (usually within 24 hours).
+            </li>
+            <li>
+                <strong>Start listing products</strong> — you'll receive a confirmation message.
+            </li>
+        </ol>
+    </div>
+
+    <div class="contact-box">
+        <p>Questions? Contact us:</p>
+        <p>📞 <a href="tel:+255XXXXXXXXX">+255 XXX XXX XXX</a></p>
+        <p>💬 <a href="https://wa.me/255XXXXXXXXX" target="_blank">WhatsApp</a></p>
+        <p>✉️ <a href="mailto:support@sokoletu.co.tz">support@sokoletu.co.tz</a></p>
+    </div>
+</div>
+{% endblock %}

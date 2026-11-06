@@ -1,0 +1,65 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Subscription Alerts</h1>
+
+{% if pending_payments %}
+<h2>Payments Pending Confirmation ({{ pending_payments|length }})</h2>
+<table class="table">
+    <thead>
+        <tr><th>Seller</th><th>Amount</th><th>Months</th><th>Reference</th><th>Date</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+        {% for p in pending_payments %}
+        <tr>
+            <td>{{ p.seller.shop_name }}</td>
+            <td>TSh {{ p.amount }}</td>
+            <td>{{ p.months }}</td>
+            <td>{{ p.reference|default:"—" }}</td>
+            <td>{{ p.created_at|date:"d M Y H:i" }}</td>
+            <td>
+                <a href="{% url 'admin:accounts_payment_change' p.pk %}" class="button">Open</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if expiring_soon %}
+<h2>Subscriptions Expiring Within 7 Days ({{ expiring_soon|length }})</h2>
+<table class="table">
+    <thead><tr><th>Shop</th><th>Owner</th><th>Expires On</th><th>Phone</th></tr></thead>
+    <tbody>
+        {% for s in expiring_soon %}
+        <tr>
+            <td>{{ s.shop_name }}</td>
+            <td>{{ s.user.username }}</td>
+            <td>{{ s.subscription_end }}</td>
+            <td>{{ s.phone }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if expired %}
+<h2>Expired Subscriptions ({{ expired|length }})</h2>
+<table class="table">
+    <thead><tr><th>Shop</th><th>Owner</th><th>Expired On</th><th>Phone</th></tr></thead>
+    <tbody>
+        {% for s in expired %}
+        <tr>
+            <td>{{ s.shop_name }}</td>
+            <td>{{ s.user.username }}</td>
+            <td>{{ s.subscription_end }}</td>
+            <td>{{ s.phone }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if not pending_payments and not expiring_soon and not expired %}
+<p>No alerts at the moment. Everything is in order. ✅</p>
+{% endif %}
+{% endblock %}

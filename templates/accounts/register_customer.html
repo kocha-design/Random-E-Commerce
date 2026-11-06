@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Sign Up as Customer{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>Sign Up as Customer</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <p class="auth-footer">Are you a seller? <a href="{% url 'register_seller' %}">Click here</a></p>
+</div>
+{% endblock %}

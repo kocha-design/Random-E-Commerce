@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — Soko Letu{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-detail-image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <div class="product-image-placeholder">No image</div>
+        {% endif %}
+    </div>
+
+    <div class="product-detail-info">
+        <h1>{{ product.name }}</h1>
+
+        <p class="seller">Seller: <strong>{{ product.seller.shop_name }}</strong></p>
+        <p class="muted">
+            {% if product.category %}Category: {{ product.category.name }}{% endif %}
+            · Listed: {{ product.created_at|date:"d M Y" }}
+        </p>
+
+        <p class="price">TSh {{ product.price }}</p>
+
+        <p>{{ product.description|linebreaks }}</p>
+
+        <div class="contact-box">
+            <h3>Contact Seller</h3>
+            <p>📞 Phone: <a href="tel:{{ product.seller.phone }}">{{ product.seller.phone }}</a></p>
+            {% if product.seller.whatsapp %}
+                {% with msg="Hi, I'm interested in "|add:product.name %}
+                <a href="https://wa.me/{{ product.seller.whatsapp }}?text={{ msg|urlencode }}"
+                   target="_blank" class="btn btn-primary">
+                    💬 WhatsApp
+                </a>
+                {% endwith %}
+            {% endif %}
+        </div>
+
+        <a href="{% url 'product_list' %}" class="btn">← Back to products</a>
+    </div>
+</div>
+{% endblock %}
