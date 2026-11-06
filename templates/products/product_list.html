@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load currency %}
 {% block title %}All Products — Random E-Commerce{% endblock %}
 
 {% block content %}
@@ -44,48 +45,60 @@
         </form>
 
         {% if products %}
-        <div class="product-grid">
-            {% for p in products %}
-            <a href="{% url 'product_detail' p.pk %}" class="product-card">
-                <div class="product-image-wrap">
-                    {% if p.image %}
-                        <img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy">
-                    {% else %}
-                        <div class="product-image-placeholder">No image</div>
-                    {% endif %}
-                    {% if forloop.counter <= 3 %}
-                        <span class="product-badge">New</span>
-                    {% endif %}
-                </div>
-                <div class="product-body">
-                    <h3>{{ p.name }}</h3>
-                    <p class="category">{{ p.category.name|default:"—" }}</p>
-                    <p class="price">TSh {{ p.price }}</p>
-                    <p class="seller">🏪 {{ p.seller.shop_name }}</p>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
+            <div class="product-grid">
+                {% for p in products %}
+                <a href="{% url 'product_detail' p.pk %}" class="product-card">
+                    <div class="product-image-wrap">
+                        {% if p.image %}
+                            <img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy">
+                        {% else %}
+                            <div class="product-image-placeholder">No image</div>
+                        {% endif %}
+                        {% if forloop.counter <= 3 %}
+                            <span class="product-badge">New</span>
+                        {% endif %}
+                    </div>
+                    <div class="product-body">
+                        <h3>{{ p.name }}</h3>
+                        <p class="category">{{ p.category.name|default:"—" }}</p>
+                        <p class="price">{{ p.price|tsh }}</p>
+                        <p class="seller">🏪 {{ p.seller.shop_name }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
 
-        {% if page_obj.has_other_pages %}
-        <nav class="pagination">
-            {% if page_obj.has_previous %}
-                <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ page_obj.previous_page_number }}" class="btn btn-sm">← Previous</a>
+            {% if page_obj.has_other_pages %}
+            <nav class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                        ← Previous
+                    </a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-num active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                        <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ num }}" class="page-num">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ page_obj.next_page_number }}">
+                        Next →
+                    </a>
+                {% endif %}
+            </nav>
             {% endif %}
-            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-            {% if page_obj.has_next %}
-                <a href="?{% if q %}q={{ q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ page_obj.next_page_number }}" class="btn btn-sm">Next →</a>
-            {% endif %}
-        </nav>
-        {% endif %}
 
         {% else %}
-        <div class="empty-state">
-            <div class="empty-icon">🔍</div>
-            <h3>No products found</h3>
-            <p>Try different search terms, or <a href="{% url 'product_list' %}">clear filters</a>.</p>
-            <a href="{% url 'product_list' %}" class="btn btn-primary">Browse All Products</a>
-        </div>
+            <div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h3>No products found</h3>
+                <p>Try different search terms, or <a href="{% url 'product_list' %}">clear filters</a>.</p>
+                <a href="{% url 'product_list' %}" class="btn btn-primary">Browse All Products</a>
+            </div>
         {% endif %}
     </div>
 </div>

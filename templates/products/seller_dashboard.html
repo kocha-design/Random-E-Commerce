@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load currency %}
 {% block title %}Seller Dashboard — {{ seller.shop_name }}{% endblock %}
 
 {% block content %}
@@ -55,7 +56,7 @@
             </td>
             <td>{{ p.name }}</td>
             <td>{{ p.category.name|default:"—" }}</td>
-            <td>TSh {{ p.price }}</td>
+            <td>{{ p.price|tsh }}</td>
             <td>
                 {% if p.is_available %}
                     <span class="badge active">Available</span>
