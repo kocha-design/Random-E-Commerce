@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.decorators.http import require_POST   # ← MUHIMU
+from django.views.decorators.http import require_POST
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.utils import timezone
 
 from accounts.decorators import seller_required
-from .models import Product, Category, FAQ 
+from .models import Product, Category, FAQ, ProductImage
 from .forms import ProductForm
 from .cart import Cart
-from django.utils import timezone
-from django.db.models import Sum
+
 
 # ==================== HOME ====================
 
@@ -32,11 +33,9 @@ def seller_dashboard(request):
     seller = request.user.seller_profile
     products = seller.products.all().order_by('-created_at')
 
-    # Takwimu
     available_count = products.filter(is_available=True).count()
     total_value = sum(p.price for p in products)
 
-    # Siku zilizobaki
     days_left = 0
     if seller.subscription_end:
         days_left = (seller.subscription_end - timezone.now().date()).days
@@ -50,6 +49,7 @@ def seller_dashboard(request):
         'total_value': total_value,
         'days_left': days_left,
     })
+
 
 @seller_required
 def product_create(request):
@@ -158,29 +158,73 @@ def seller_pending(request):
     return render(request, 'products/seller_pending.html')
 
 
+# ==================== FEATURE 2: AJAX SEARCH ====================
+
+def search_ajax(request):
+    """Live search kwa AJAX (matokeo yanaonekana unapoandika)."""
+    q = request.GET.get('q', '').strip()
+    if not q or len(q) < 2:
+        return JsonResponse({'results': []})
+
+    products = Product.objects.filter(
+        is_available=True,
+        seller__status='active',
+        name__icontains=q,
+    ).select_related('seller')[:5]
+
+    results = [{
+        'id': p.id,
+        'name': p.name,
+        'price': str(p.price),
+        'image': p.image.url if p.image else None,
+        'seller': p.seller.shop_name,
+        'url': f'/products/{p.id}/',
+    } for p in products]
+
+    return JsonResponse({'results': results})
+
+
 # ==================== CART ====================
 
 @require_POST
-@require_POST
 def cart_add(request, product_id):
-    # 1. Kagua kama ni Seller
+    # Feature 1: Zuruta seller
     if request.user.is_authenticated and request.user.is_seller:
-        messages.error(request, "Sellers cannot buy products. Please log out to shop as a customer.")
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'message': 'Sellers cannot buy products. Please log out to shop.'
+            }, status=403)
+        messages.error(request, "Sellers cannot buy products. Please log out to shop.")
         return redirect('product_detail', pk=product_id)
 
-    # 2. Kagua kama ni bidhaa yake mwenyewe (hii ni kwa ajili ya guest ambaye ni mmiliki? Haiwezekani kwa guest, lakini ni usalama wa ziada)
     product = get_object_or_404(Product, id=product_id)
-    
-    # Kama ni seller (ingawa tumezuia juu), hii ni double check
+
     if request.user.is_authenticated and getattr(request.user, 'seller_profile', None) == product.seller:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': False,
+                'message': 'You cannot buy your own products.'
+            }, status=403)
         messages.error(request, "You cannot buy your own products.")
         return redirect('product_detail', pk=product_id)
 
-    # 3. Endelea na cart
+    # Endelea na cart
     cart = Cart(request)
     quantity = int(request.POST.get('quantity', 1))
     override = request.POST.get('override') == 'True'
     cart.add(product=product, quantity=quantity, override_quantity=override)
+
+    # Feature 1: Kama ni AJAX, rudisha JSON
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'message': f'{product.name} added to cart',
+            'cart_count': len(cart),
+            'cart_total': str(cart.get_total_price()),
+        })
+
+    # Kama ni form ya kawaida, redirect
     messages.success(request, f"{product.name} added to cart.")
     return redirect('cart_detail')
 
@@ -200,18 +244,20 @@ def cart_detail(request):
         return redirect('seller_dashboard')
 
     cart = Cart(request)
-    
-    # Tengeneza ujumbe wa WhatsApp
+
     message = "Hello, I'd like to order:\n\n"
     for item in cart:
         message += f"- {item['product'].name} x {item['quantity']} = {item['total_price']} TSh\n"
     message += f"\nTotal: {cart.get_total_price()} TSh"
-    
+
     return render(request, 'cart/detail.html', {
         'cart': cart,
         'whatsapp_message': message,
     })
-    
+
+
+# ==================== FAQ ====================
+
 def faq_list(request):
     faqs = FAQ.objects.filter(is_active=True)
     return render(request, 'products/faq.html', {'faqs': faqs})
