@@ -372,14 +372,132 @@ main.container {
     background: #d0d0d0;
 }
 
-/* ===== Footer ===== */
+/* ===== Footer (Modern) ===== */
 .site-footer {
-    margin-top: 60px;
-    padding: 20px 0;
-    background: #eee;
-    text-align: center;
-    color: #666;
+    background: #1a3d3a;
+    color: #d1d5db;
+    margin-top: 80px;
+    padding: 0;
+    font-size: 0.95rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 40px;
+    padding: 60px 20px 40px;
+}
+
+.footer-col h3,
+.footer-col h4 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.footer-col h3 {
+    font-size: 1.2rem;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem !important;
+}
+
+.footer-text {
+    line-height: 1.7;
     font-size: 0.9rem;
+    color: #a8b3af;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.15s;
+    font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+    color: #febd69;
+}
+
+.footer-contact {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0;
+}
+
+.footer-contact li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.contact-icon {
+    font-size: 1rem;
+}
+
+.footer-contact a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.footer-contact a:hover {
+    color: #febd69;
+}
+
+.footer-bottom {
+    background: #142e2c;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-bottom-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: #a8b3af;
+    font-size: 0.85rem;
+}
+
+.footer-bottom-inner strong {
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 40px 20px 30px;
+    }
+    .footer-bottom-inner {
+        flex-direction: column;
+        text-align: center;
+    }
 }
 
 /* ===== Badges (ZILIKOSEKANA!) ===== */
