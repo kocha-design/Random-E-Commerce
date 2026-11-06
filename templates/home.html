@@ -3,44 +3,52 @@
 {% block title %}Random E-Commerce — Buy and Sell Online in Tanzania{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Hero Section (Full Width - Inajaa screen nzima) -->
 <section class="hero-section">
     <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <span class="hero-badge">🇹🇿 Trusted Marketplace in Tanzania</span>
-        <h1>Shop from Local Sellers</h1>
+    
+    <!-- Container ndani ya hero ili maandishi yasigande kwenye kona -->
+    <div class="hero-content container"> 
+        <span class="hero-badge">🇹🇿 The #1 Marketplace in Tanzania</span>
+        <h1>Find Everything You Need, Locally.</h1>
         <p class="hero-subtitle">
-            Find what you need from trusted businesses in your community. No signup required — just browse and contact sellers directly.
+            Connect directly with trusted sellers. No account needed, no hidden fees. Just great products.
         </p>
+        
+        <form action="{% url 'product_list' %}" method="get" class="hero-search">
+            <div class="search-input-wrap">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="q" placeholder="Search for products, brands, or categories...">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
         <div class="hero-cta">
-            <a href="{% url 'product_list' %}" class="btn btn-white">Browse Products</a>
-            <a href="{% url 'register_seller' %}" class="btn btn-outline-light">Become a Seller →</a>
-        </div>
-        <div class="hero-stats">
-            <div class="stat">
-                <strong>100+</strong>
-                <span>Products</span>
-            </div>
-            <div class="stat">
-                <strong>10+</strong>
-                <span>Sellers</span>
-            </div>
-            <div class="stat">
-                <strong>0</strong>
-                <span>Hidden Fees</span>
-            </div>
+            <a href="{% url 'product_list' %}" class="btn btn-white">Start Shopping</a>
+            <a href="{% url 'register_seller' %}" class="btn btn-outline-light">Sell on Random E-Commerce</a>
         </div>
     </div>
 </section>
 
-<!-- Categories Section -->
+<!-- Categories Section (Ipo ndani ya container) -->
 {% if categories %}
-<section class="section">
-    <h2 class="section-title">Browse by Category</h2>
+<section class="section container">
+    <div class="section-header">
+        <h2 class="section-title">Shop by Category</h2>
+    </div>
     <div class="category-grid">
         {% for c in categories %}
         <a href="{% url 'product_list' %}?category={{ c.slug }}" class="category-card">
-            <div class="category-icon">📦</div>
+            <div class="category-icon">
+                <!-- SVG Icon badala ya Emoji -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2c7873" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+            </div>
             <h3>{{ c.name }}</h3>
         </a>
         {% endfor %}
@@ -48,12 +56,12 @@
 </section>
 {% endif %}
 
-<!-- Latest Products Section -->
+<!-- Latest Products Section (Ipo ndani ya container) -->
 {% if latest_products %}
-<section class="section">
+<section class="section container">
     <div class="section-header">
-        <h2 class="section-title">Latest Products</h2>
-        <a href="{% url 'product_list' %}" class="link-arrow">View all →</a>
+        <h2 class="section-title">Trending Products</h2>
+        <a href="{% url 'product_list' %}" class="link-arrow">View all products →</a>
     </div>
     <div class="product-grid">
         {% for p in latest_products %}
@@ -66,8 +74,8 @@
                 {% endif %}
             </div>
             <div class="product-body">
-                <h3>{{ p.name }}</h3>
                 <p class="category">{{ p.category.name|default:"—" }}</p>
+                <h3>{{ p.name }}</h3>
                 <p class="price">{{ p.price|tsh }}</p>
                 <p class="seller">🏪 {{ p.seller.shop_name }}</p>
             </div>
@@ -77,37 +85,61 @@
 </section>
 {% endif %}
 
-<!-- Why Random E-Commerce Section -->
-<section class="section section-alt">
-    <h2 class="section-title text-center">Why Random E-Commerce?</h2>
+<!-- Why Random E-Commerce Section (Ipo ndani ya container) -->
+<section class="section section-alt container">
+    <div class="section-header" style="justify-content: center;">
+        <h2 class="section-title">Why Choose Us?</h2>
+    </div>
     <div class="features-grid">
         <div class="feature">
-            <div class="feature-icon">🛒</div>
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2c7873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+            </div>
             <h3>Shop Without Signup</h3>
             <p>No account needed. Just browse, find what you want, and contact the seller directly.</p>
         </div>
         <div class="feature">
-            <div class="feature-icon">💬</div>
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2c7873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+            </div>
             <h3>Direct Contact</h3>
             <p>Talk to sellers via WhatsApp or phone. No middleman, no hidden fees.</p>
         </div>
         <div class="feature">
-            <div class="feature-icon">🏪</div>
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2c7873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </div>
             <h3>Local Businesses</h3>
             <p>Support small businesses in your community. Real people, real products.</p>
         </div>
         <div class="feature">
-            <div class="feature-icon">✓</div>
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2c7873" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
             <h3>Verified Sellers</h3>
             <p>All sellers are verified and active. Your trust is our priority.</p>
         </div>
     </div>
 </section>
 
-<!-- Become a Seller Section -->
+<!-- Become a Seller Section (CTA) - Full Width -->
 <section class="cta-section">
-    <h2>Have Something to Sell?</h2>
-    <p>Join Random E-Commerce and reach customers across Tanzania.</p>
-    <a href="{% url 'register_seller' %}" class="btn btn-primary btn-lg">Become a Seller</a>
+    <div class="container text-center">
+        <h2>Have Something to Sell?</h2>
+        <p>Join thousands of local businesses reaching customers across Tanzania.</p>
+        <a href="{% url 'register_seller' %}" class="btn btn-white">Start Selling Today</a>
+    </div>
 </section>
 {% endblock %}
