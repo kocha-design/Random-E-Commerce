@@ -1948,3 +1948,17 @@ main.container {
 .checkout-box .btn {
     margin: 5px;
 }
+
+.seller-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.seller-warning p {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
