@@ -1,27 +1,29 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from accounts.decorators import seller_required
-from .models import Product
-from .forms import ProductForm
-from django.core.paginator import Paginator
+from django.views.decorators.http import require_POST   # ← MUHIMU
 from django.db.models import Q
-from .models import Product, Category
-# products/views.py
-from .models import Product, Category
+from django.core.paginator import Paginator
 
+from accounts.decorators import seller_required
+from .models import Product, Category
+from .forms import ProductForm
+from .cart import Cart
+
+
+# ==================== HOME ====================
 
 def home(request):
     latest_products = Product.objects.filter(
         is_available=True,
         seller__status='active',
     ).select_related('seller', 'category').order_by('-created_at')[:8]
-
     categories = Category.objects.all()[:8]
-
     return render(request, 'home.html', {
         'latest_products': latest_products,
         'categories': categories,
     })
+
+
 # ==================== SELLER ====================
 
 @seller_required
@@ -31,6 +33,7 @@ def seller_dashboard(request):
     return render(request, 'products/seller_dashboard.html', {
         'seller': seller,
         'products': products,
+        'available_count': products.filter(is_available=True).count(),
     })
 
 
@@ -42,13 +45,13 @@ def product_create(request):
             product = form.save(commit=False)
             product.seller = request.user.seller_profile
             product.save()
-            messages.success(request, "Bidhaa imeongezwa kikamilifu.")
+            messages.success(request, "Product added successfully.")
             return redirect('seller_dashboard')
     else:
         form = ProductForm()
     return render(request, 'products/product_form.html', {
         'form': form,
-        'title': "Ongeza Bidhaa Mpya",
+        'title': "Add New Product",
     })
 
 
@@ -60,13 +63,13 @@ def product_edit(request, pk):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            messages.success(request, "Bidhaa imehaririwa.")
+            messages.success(request, "Product updated.")
             return redirect('seller_dashboard')
     else:
         form = ProductForm(instance=product)
     return render(request, 'products/product_form.html', {
         'form': form,
-        'title': "Hariri Bidhaa",
+        'title': "Edit Product",
     })
 
 
@@ -76,33 +79,12 @@ def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk, seller=seller)
     if request.method == 'POST':
         product.delete()
-        messages.success(request, "Bidhaa imefutwa.")
+        messages.success(request, "Product deleted.")
         return redirect('seller_dashboard')
     return render(request, 'products/product_confirm_delete.html', {'product': product})
 
 
-# ==================== CUSTOMER / PUBLIC ====================
-
-def product_list(request):
-    products = Product.objects.filter(
-        is_available=True,
-        seller__status='active',
-    ).select_related('seller', 'category')
-    return render(request, 'products/product_list.html', {'products': products})
-
-
-def product_detail(request, pk):
-    product = get_object_or_404(
-        Product.objects.select_related('seller', 'category'),
-        pk=pk,
-        is_available=True,
-        seller__status='active',
-    )
-    return render(request, 'products/product_detail.html', {'product': product})
-
-
-def seller_pending(request):
-    return render(request, 'products/seller_pending.html')
+# ==================== PUBLIC ====================
 
 def product_list(request):
     products = Product.objects.filter(
@@ -137,14 +119,62 @@ def product_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    categories = Category.objects.all()
-
     return render(request, 'products/product_list.html', {
         'page_obj': page_obj,
         'products': page_obj,
-        'categories': categories,
+        'categories': Category.objects.all(),
         'q': q,
         'selected_category': cat_slug,
         'min_price': min_price,
         'max_price': max_price,
+    })
+
+
+def product_detail(request, pk):
+    product = get_object_or_404(
+        Product.objects.select_related('seller', 'category'),
+        pk=pk,
+        is_available=True,
+        seller__status='active',
+    )
+    return render(request, 'products/product_detail.html', {'product': product})
+
+
+def seller_pending(request):
+    return render(request, 'products/seller_pending.html')
+
+
+# ==================== CART ====================
+
+@require_POST
+def cart_add(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    quantity = int(request.POST.get('quantity', 1))
+    override = request.POST.get('override') == 'True'
+    cart.add(product=product, quantity=quantity, override_quantity=override)
+    messages.success(request, f"{product.name} added to cart.")
+    return redirect('cart_detail')
+
+
+def cart_remove(request, product_id):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    cart.remove(product)
+    messages.success(request, f"{product.name} removed from cart.")
+    return redirect('cart_detail')
+
+
+def cart_detail(request):
+    cart = Cart(request)
+    
+    # Tengeneza ujumbe wa WhatsApp
+    message = "Hello, I'd like to order:\n\n"
+    for item in cart:
+        message += f"- {item['product'].name} x {item['quantity']} = {item['total_price']} TSh\n"
+    message += f"\nTotal: {cart.get_total_price()} TSh"
+    
+    return render(request, 'cart/detail.html', {
+        'cart': cart,
+        'whatsapp_message': message,
     })
