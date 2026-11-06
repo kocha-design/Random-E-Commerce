@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Soko Letu{% endblock %}</title>
+    <title>{% block title %}Random E-Commerce{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="{% url 'home' %}" class="logo">Soko Letu</a>
+            <a href="{% url 'home' %}" class="logo">Random E-Commerce</a>
 <nav>
     <a href="{% url 'product_list' %}">Products</a>
 
@@ -48,7 +48,7 @@
     </main>
 
     <footer class="site-footer">
-        <div class="container">&copy; {% now "Y" %} Soko Letu</div>
+        <div class="container">&copy; {% now "Y" %} Random E-Commerce</div>
     </footer>
 
     <script src="{% static 'js/main.js' %}"></script>
