@@ -5,7 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Random E-Commerce{% endblock %}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -17,7 +23,7 @@
                 Random E-Commerce
             </a>
 
-            <!-- Search bar (kama Amazon) -->
+            <!-- Search bar -->
             <form action="{% url 'product_list' %}" method="get" class="header-search">
                 <input type="text" name="q" placeholder="Search products..." value="{{ request.GET.q }}">
                 <button type="submit" aria-label="Search">
@@ -30,6 +36,15 @@
 
             <!-- Right nav -->
             <nav class="header-nav">
+                <!-- Cart link — INAONEKANA KWA WOTE (guest, customer, seller) -->
+                <a href="{% url 'cart_detail' %}" class="nav-link">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">
+                        <small>Cart</small>
+                        <strong>{{ cart|length }} items</strong>
+                    </span>
+                </a>
+
                 {% if user.is_authenticated %}
                     {% if user.is_seller %}
                         <a href="{% url 'seller_dashboard' %}" class="nav-link">
@@ -86,14 +101,15 @@
     </header>
 
     {% if messages %}
-        <div class="container">
+        <div class="container" style="margin-top: 20px;">
             {% for msg in messages %}
                 <div class="messages {{ msg.tags }}">{{ msg }}</div>
             {% endfor %}
         </div>
     {% endif %}
 
-    <main class="container">
+    <!-- MUHIMU: Hakuna class="container" hapa ili Hero ijae screen nzima -->
+    <main>
         {% block content %}{% endblock %}
     </main>
 
