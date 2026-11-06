@@ -8,7 +8,8 @@ from accounts.decorators import seller_required
 from .models import Product, Category
 from .forms import ProductForm
 from .cart import Cart
-
+from django.utils import timezone
+from django.db.models import Sum
 
 # ==================== HOME ====================
 
@@ -30,12 +31,25 @@ def home(request):
 def seller_dashboard(request):
     seller = request.user.seller_profile
     products = seller.products.all().order_by('-created_at')
+
+    # Takwimu
+    available_count = products.filter(is_available=True).count()
+    total_value = sum(p.price for p in products)
+
+    # Siku zilizobaki
+    days_left = 0
+    if seller.subscription_end:
+        days_left = (seller.subscription_end - timezone.now().date()).days
+        if days_left < 0:
+            days_left = 0
+
     return render(request, 'products/seller_dashboard.html', {
         'seller': seller,
         'products': products,
-        'available_count': products.filter(is_available=True).count(),
+        'available_count': available_count,
+        'total_value': total_value,
+        'days_left': days_left,
     })
-
 
 @seller_required
 def product_create(request):
