@@ -55,5 +55,5 @@ Thumbs.db
 .coverage
 htmlcov/
 
-# Locale (kama bado unatumia)
-/locale/*.mo
+# Development scripts
+seed_data.py
