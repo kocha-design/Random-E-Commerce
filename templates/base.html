@@ -113,9 +113,71 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="site-footer">
-        <div class="container">&copy; {% now "Y" %} Random E-Commerce</div>
-    </footer>
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <!-- Column 1: Brand -->
+        <div class="footer-col">
+            <h3 class="footer-brand">
+                <span class="logo-icon">🛍️</span>
+                Random E-Commerce
+            </h3>
+            <p class="footer-text">
+                Tanzania's trusted marketplace for local businesses and customers. Buy and sell with confidence.
+            </p>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="{% url 'product_list' %}">Browse Products</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'login' %}">Seller Login</a></li>
+                <li><a href="{% url 'register_seller' %}">Become a Seller</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 3: For Sellers -->
+        <div class="footer-col">
+            <h4>For Sellers</h4>
+            <ul class="footer-links">
+                <li><a href="{% url 'register_seller' %}">Create Shop</a></li>
+                <li><a href="{% url 'login' %}">Manage Products</a></li>
+                <li><a href="{% url 'login' %}">Subscription Plans</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 4: Developer / Contact -->
+        <div class="footer-col">
+            <h4>Developer</h4>
+            <p class="footer-text">
+                Built with <strong>Random Technology Solutions</strong>.
+            </p>
+            <ul class="footer-contact">
+                <li>
+                    <span class="contact-icon">✉️</span>
+                    <a href="mailto:solutionrandomtech@gmail.com">solutionrandomtech@gmail.com</a>
+                </li>
+                <li>
+                    <span class="contact-icon">🌐</span>
+                    <a href="https://random-technology-solutions.lovable.app" target="_blank" rel="noopener">randomtech.co.tz</a>
+                </li>
+                <li>
+                    <span class="contact-icon">📞</span>
+                    <a href="tel:+255679918293">+255 679 918 293</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+        <div class="container footer-bottom-inner">
+            <p>&copy; {% now "Y" %} Random E-Commerce. All rights reserved.</p>
+            <p>Developed by <strong>Random Technology Solutions</strong></p>
+        </div>
+    </div>
+</footer>
 
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
