@@ -17,7 +17,7 @@ class CustomUserAdmin(UserAdmin):
     list_filter = ('is_seller', 'is_customer', 'is_staff')
     search_fields = ('username', 'email', 'phone')
     fieldsets = UserAdmin.fieldsets + (
-        ('Roles', {'fields': ('is_seller', 'is_customer', 'phone', 'language')}),
+        ('Roles', {'fields': ('is_seller', 'is_customer', 'phone')}),
     )
 
 
