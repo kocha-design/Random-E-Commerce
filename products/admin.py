@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, FAQ 
 
 
 @admin.register(Category)
@@ -15,3 +15,10 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description', 'seller__shop_name')
     list_select_related = ('seller', 'category')
     readonly_fields = ('created_at', 'updated_at')
+    
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ('question', 'order', 'is_active', 'created_at')
+    list_editable = ('order', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('question', 'answer')

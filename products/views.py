@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 
 from accounts.decorators import seller_required
-from .models import Product, Category
+from .models import Product, Category, FAQ 
 from .forms import ProductForm
 from .cart import Cart
 from django.utils import timezone
@@ -211,3 +211,7 @@ def cart_detail(request):
         'cart': cart,
         'whatsapp_message': message,
     })
+    
+def faq_list(request):
+    faqs = FAQ.objects.filter(is_active=True)
+    return render(request, 'products/faq.html', {'faqs': faqs})
