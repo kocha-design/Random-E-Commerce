@@ -95,19 +95,16 @@ def product_list(request):
         seller__status='active',
     ).select_related('seller', 'category')
 
-    # Search (jina au maelezo)
     q = request.GET.get('q', '').strip()
     if q:
         products = products.filter(
             Q(name__icontains=q) | Q(description__icontains=q)
         )
 
-    # Filter kwa category (slug)
     cat_slug = request.GET.get('category', '').strip()
     if cat_slug:
         products = products.filter(category__slug=cat_slug)
 
-    # Filter kwa bei
     min_price = request.GET.get('min_price', '').strip()
     max_price = request.GET.get('max_price', '').strip()
     if min_price:
@@ -121,8 +118,7 @@ def product_list(request):
         except ValueError:
             pass
 
-    # Pagination
-    paginator = Paginator(products, 12)  # bidhaa 12 kwa ukurasa
+    paginator = Paginator(products, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
