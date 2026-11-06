@@ -130,12 +130,12 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Email (console backend — kwa development)
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'solutionrandomtech@gmail.com')
 
 # Business Settings
 SUBSCRIPTION_PRICE_TSH = int(os.getenv('SUBSCRIPTION_PRICE_TSH', '10000'))
-ADMIN_MPESA_NUMBER = os.getenv('ADMIN_MPESA_NUMBER', '+255XXXXXXXXX')
-ADMIN_WHATSAPP_NUMBER = os.getenv('ADMIN_WHATSAPP_NUMBER', '255XXXXXXXXX')
+ADMIN_MPESA_NUMBER = os.getenv('ADMIN_MPESA_NUMBER', '+255613950508')
+ADMIN_WHATSAPP_NUMBER = os.getenv('ADMIN_WHATSAPP_NUMBER', '255679918293')
 
 
 # Default primary key field type

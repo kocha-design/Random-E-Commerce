@@ -122,6 +122,6 @@ def get_urls():
     return custom_urls + urls
 
 admin.site.get_urls = get_urls
-admin.site.site_header = "Soko Letu Admin"
-admin.site.site_title = "Soko Letu"
-admin.site.index_title = "Usimamizi wa Soko"
+admin.site.site_header = "Random E-Commerce Admin"
+admin.site.site_title = "Random E-Commerce"
+admin.site.index_title = "Management Of E-Commerce Site"
