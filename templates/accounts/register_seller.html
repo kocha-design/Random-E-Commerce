@@ -1,13 +1,101 @@
 {% extends "base.html" %}
-{% block title %}Sign Up as Seller{% endblock %}
+{% block title %}Become a Seller — Soko Letu{% endblock %}
+
 {% block content %}
-<div class="form-card">
-    <h2>Sign Up as Seller</h2>
-    <form method="post">
+<div class="form-card form-card-wide">
+    <div class="form-header">
+        <h2>Become a Seller</h2>
+        <p class="muted">Create your shop and start selling on Soko Letu. It takes 2 minutes.</p>
+    </div>
+
+    <form method="post" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+
+        {% if form.non_field_errors %}
+            <div class="messages error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <!-- Section 1: Account -->
+        <fieldset class="form-section">
+            <legend>1. Account Information</legend>
+
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="field-error">{{ form.username.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="field-error">{{ form.email.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="{{ form.password1.id_for_label }}">Password</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <div class="field-error">{{ form.password1.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <div class="field-error">{{ form.password2.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Section 2: Shop -->
+        <fieldset class="form-section">
+            <legend>2. Shop Information</legend>
+
+            <div class="form-grid">
+                <div class="form-row">
+                    <label for="{{ form.shop_name.id_for_label }}">Shop Name</label>
+                    {{ form.shop_name }}
+                    {% if form.shop_name.errors %}
+                        <div class="field-error">{{ form.shop_name.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="{{ form.phone.id_for_label }}">Phone (M-Pesa)</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <div class="field-error">{{ form.phone.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="{{ form.whatsapp.id_for_label }}">WhatsApp (optional)</label>
+                    {{ form.whatsapp }}
+                </div>
+
+                <div class="form-row">
+                    <label for="{{ form.location.id_for_label }}">Location (optional)</label>
+                    {{ form.location }}
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Actions -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">Create My Shop</button>
+            <a href="{% url 'home' %}" class="btn">Cancel</a>
+        </div>
+
+        <p class="auth-footer">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
     </form>
-    <p class="auth-footer">Are you a customer? <a href="{% url 'register_customer' %}">Click here</a></p>
 </div>
 {% endblock %}

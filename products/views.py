@@ -6,7 +6,22 @@ from .forms import ProductForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Product, Category
+# products/views.py
+from .models import Product, Category
 
+
+def home(request):
+    latest_products = Product.objects.filter(
+        is_available=True,
+        seller__status='active',
+    ).select_related('seller', 'category').order_by('-created_at')[:8]
+
+    categories = Category.objects.all()[:8]
+
+    return render(request, 'home.html', {
+        'latest_products': latest_products,
+        'categories': categories,
+    })
 # ==================== SELLER ====================
 
 @seller_required

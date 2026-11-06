@@ -12,27 +12,26 @@
     <header class="site-header">
         <div class="container">
             <a href="{% url 'home' %}" class="logo">Soko Letu</a>
-            <nav>
-                <a href="{% url 'product_list' %}">Products</a>
+<nav>
+    <a href="{% url 'product_list' %}">Products</a>
 
-                {% if user.is_authenticated %}
-                    {% if user.is_seller %}
-                        <a href="{% url 'seller_dashboard' %}">My Dashboard</a>
-                    {% endif %}
-                    {% if user.is_staff %}
-                        <a href="{% url 'admin:index' %}">Admin</a>
-                    {% endif %}
-                    <span>Hi, {{ user.username }}</span>
-                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="link-btn">Logout</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}">Login</a>
-                    <a href="{% url 'register_customer' %}">Sign Up (Customer)</a>
-                    <a href="{% url 'register_seller' %}">Sign Up (Seller)</a>
-                {% endif %}
-            </nav>
+    {% if user.is_authenticated %}
+        {% if user.is_seller %}
+            <a href="{% url 'seller_dashboard' %}">My Dashboard</a>
+        {% endif %}
+        {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}">Admin</a>
+        {% endif %}
+        <span>Hi, {{ user.username }}</span>
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="link-btn">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Seller Login</a>
+        <a href="{% url 'register_seller' %}">Become a Seller</a>
+    {% endif %}
+</nav>
         </div>
     </header>
 
