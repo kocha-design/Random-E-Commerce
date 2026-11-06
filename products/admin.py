@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Category, Product, FAQ 
+from .models import Category, Product, FAQ, ProductImage
+
+
+class ProductImageInline(admin.TabularInline):
+    """Inaruhusu kuongeza picha nyingi (gallery) kwa bidhaa moja."""
+    model = ProductImage
+    extra = 3
+    fields = ('image',)
 
 
 @admin.register(Category)
@@ -15,7 +22,9 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description', 'seller__shop_name')
     list_select_related = ('seller', 'category')
     readonly_fields = ('created_at', 'updated_at')
-    
+    inlines = [ProductImageInline]  # ← Hii inaunganisha picha za gallery
+
+
 @admin.register(FAQ)
 class FAQAdmin(admin.ModelAdmin):
     list_display = ('question', 'order', 'is_active', 'created_at')

@@ -30,7 +30,21 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+
+class ProductImage(models.Model):
+    """Picha za ziada za bidhaa (Gallery) - Feature 5"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='products/gallery/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"{self.product.name} - Image {self.pk}"
+
+
 class FAQ(models.Model):
     question = models.CharField(max_length=255)
     answer = models.TextField()
