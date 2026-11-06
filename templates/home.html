@@ -5,16 +5,30 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="hero-section">
+    <div class="hero-overlay"></div>
     <div class="hero-content">
+        <span class="hero-badge">🇹🇿 Trusted Marketplace in Tanzania</span>
         <h1>Shop from Local Sellers</h1>
-        <p class="hero-subtitle">Find what you need from trusted businesses in your community.</p>
-        <form action="{% url 'product_list' %}" method="get" class="hero-search">
-            <input type="text" name="q" placeholder="What are you looking for?">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+        <p class="hero-subtitle">
+            Find what you need from trusted businesses in your community. No signup required — just browse and contact sellers directly.
+        </p>
         <div class="hero-cta">
-            <a href="{% url 'product_list' %}" class="btn btn-primary">Browse Products</a>
-            <a href="{% url 'register_seller' %}" class="btn btn-outline-light">Become a Seller</a>
+            <a href="{% url 'product_list' %}" class="btn btn-white">Browse Products</a>
+            <a href="{% url 'register_seller' %}" class="btn btn-outline-light">Become a Seller →</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <strong>100+</strong>
+                <span>Products</span>
+            </div>
+            <div class="stat">
+                <strong>10+</strong>
+                <span>Sellers</span>
+            </div>
+            <div class="stat">
+                <strong>0</strong>
+                <span>Hidden Fees</span>
+            </div>
         </div>
     </div>
 </section>
@@ -22,16 +36,14 @@
 <!-- Categories Section -->
 {% if categories %}
 <section class="section">
-    <div class="container">
-        <h2 class="section-title">Browse by Category</h2>
-        <div class="category-grid">
-            {% for c in categories %}
-            <a href="{% url 'product_list' %}?category={{ c.slug }}" class="category-card">
-                <div class="category-icon">📦</div>
-                <h3>{{ c.name }}</h3>
-            </a>
-            {% endfor %}
-        </div>
+    <h2 class="section-title">Browse by Category</h2>
+    <div class="category-grid">
+        {% for c in categories %}
+        <a href="{% url 'product_list' %}?category={{ c.slug }}" class="category-card">
+            <div class="category-icon">📦</div>
+            <h3>{{ c.name }}</h3>
+        </a>
+        {% endfor %}
     </div>
 </section>
 {% endif %}
@@ -39,69 +51,63 @@
 <!-- Latest Products Section -->
 {% if latest_products %}
 <section class="section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Latest Products</h2>
-            <a href="{% url 'product_list' %}" class="link-arrow">View all →</a>
-        </div>
-        <div class="product-grid">
-            {% for p in latest_products %}
-            <a href="{% url 'product_detail' p.pk %}" class="product-card">
-                <div class="product-image-wrap">
-                    {% if p.image %}
-                        <img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy">
-                    {% else %}
-                        <div class="product-image-placeholder">No image</div>
-                    {% endif %}
-                </div>
-                <div class="product-body">
-                    <h3>{{ p.name }}</h3>
-                    <p class="category">{{ p.category.name|default:"—" }}</p>
-                    <p class="price">{{ p.price|tsh }}</p>
-                    <p class="seller">🏪 {{ p.seller.shop_name }}</p>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
+    <div class="section-header">
+        <h2 class="section-title">Latest Products</h2>
+        <a href="{% url 'product_list' %}" class="link-arrow">View all →</a>
+    </div>
+    <div class="product-grid">
+        {% for p in latest_products %}
+        <a href="{% url 'product_detail' p.pk %}" class="product-card">
+            <div class="product-image-wrap">
+                {% if p.image %}
+                    <img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy">
+                {% else %}
+                    <div class="product-image-placeholder">No image</div>
+                {% endif %}
+            </div>
+            <div class="product-body">
+                <h3>{{ p.name }}</h3>
+                <p class="category">{{ p.category.name|default:"—" }}</p>
+                <p class="price">{{ p.price|tsh }}</p>
+                <p class="seller">🏪 {{ p.seller.shop_name }}</p>
+            </div>
+        </a>
+        {% endfor %}
     </div>
 </section>
 {% endif %}
 
 <!-- Why Random E-Commerce Section -->
 <section class="section section-alt">
-    <div class="container">
-        <h2 class="section-title text-center">Why Random E-Commerce?</h2>
-        <div class="features-grid">
-            <div class="feature">
-                <div class="feature-icon">🛒</div>
-                <h3>Shop Without Signup</h3>
-                <p>No account needed. Just browse, find what you want, and contact the seller directly.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">💬</div>
-                <h3>Direct Contact</h3>
-                <p>Talk to sellers via WhatsApp or phone. No middleman, no hidden fees.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🏪</div>
-                <h3>Local Businesses</h3>
-                <p>Support small businesses in your community. Real people, real products.</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">✓</div>
-                <h3>Verified Sellers</h3>
-                <p>All sellers are verified and active. Your trust is our priority.</p>
-            </div>
+    <h2 class="section-title text-center">Why Random E-Commerce?</h2>
+    <div class="features-grid">
+        <div class="feature">
+            <div class="feature-icon">🛒</div>
+            <h3>Shop Without Signup</h3>
+            <p>No account needed. Just browse, find what you want, and contact the seller directly.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">💬</div>
+            <h3>Direct Contact</h3>
+            <p>Talk to sellers via WhatsApp or phone. No middleman, no hidden fees.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🏪</div>
+            <h3>Local Businesses</h3>
+            <p>Support small businesses in your community. Real people, real products.</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">✓</div>
+            <h3>Verified Sellers</h3>
+            <p>All sellers are verified and active. Your trust is our priority.</p>
         </div>
     </div>
 </section>
 
 <!-- Become a Seller Section -->
 <section class="cta-section">
-    <div class="container text-center">
-        <h2>Have Something to Sell?</h2>
-        <p>Join Random E-Commerce and reach customers across Tanzania.</p>
-        <a href="{% url 'register_seller' %}" class="btn btn-primary btn-lg">Become a Seller</a>
-    </div>
+    <h2>Have Something to Sell?</h2>
+    <p>Join Random E-Commerce and reach customers across Tanzania.</p>
+    <a href="{% url 'register_seller' %}" class="btn btn-primary btn-lg">Become a Seller</a>
 </section>
 {% endblock %}
