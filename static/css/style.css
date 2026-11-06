@@ -381,10 +381,24 @@ main.container {
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
+.product-detail-image {
+    background: #f0f4f3;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;   /* Square */
+    max-height: 500px;
+}
+
 .product-detail-image img {
     width: 100%;
-    border-radius: 8px;
+    height: 100%;
+    object-fit: contain;   /* Sio cover — inaonyesha picha nzima */
+    padding: 20px;
 }
+
 .product-detail-info h1 { margin-bottom: 15px; }
 .product-detail-info .price {
     font-size: 1.5rem;
@@ -392,6 +406,26 @@ main.container {
     font-weight: 700;
     margin: 15px 0;
 }
+
+.product-detail-info .description {
+    color: #555;
+    line-height: 1.7;
+    margin: 15px 0 20px;
+    font-size: 0.95rem;
+}
+
+.product-detail-info .muted {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.product-detail-info h1 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
 .contact-box {
     background: #f7f9fb;
     padding: 15px;
@@ -411,6 +445,37 @@ main.container {
         width: 100%;
         text-align: center;
     }
+}
+
+/* ===== Links in contact box and back links ===== */
+.contact-box a,
+.product-detail-info > a {
+    color: #2c7873;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.contact-box a:hover,
+.product-detail-info > a:hover {
+    text-decoration: underline;
+}
+
+/* Back link with arrow */
+.back-link {
+    display: inline-block;
+    color: #2c7873;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 20px;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.back-link:hover {
+    background: #f0f4f3;
+    text-decoration: none;
 }
 
 /* Filter bar */
@@ -969,4 +1034,88 @@ main.container {
 .page-header .muted {
     color: #666;
     font-size: 0.95rem;
+}
+
+/* ===== WhatsApp Button ===== */
+.btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.btn-whatsapp:hover {
+    background: #1ebe5b;
+    transform: translateY(-1px);
+    color: white;
+}
+
+.btn-whatsapp svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 40px 0 20px;
+    flex-wrap: wrap;
+}
+
+.pagination span {
+    color: #666;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.pagination a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: white;
+    color: #2c7873;
+    border: 1px solid #2c7873;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+}
+
+.pagination a:hover {
+    background: #2c7873;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(44, 120, 115, 0.2);
+}
+
+/* Kama unataka "page number" buttons pia */
+.pagination .page-num {
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.pagination .page-num:hover {
+    background: #f0f4f3;
+}
+
+.pagination .page-num.active {
+    background: #2c7873;
+    color: white;
+    font-weight: 700;
 }
